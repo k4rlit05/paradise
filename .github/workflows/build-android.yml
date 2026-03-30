@@ -30,11 +30,11 @@ jobs:
           ls -R .
 
       - name: Accept Android licenses
-        run: yes | /home/runner/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses
+        run: yes | /home/runner/android-sdk/cmdline-tools/bin/sdkmanager --licenses
 
       - name: Install Android build tools
         run: |
-          yes | /home/runner/android-sdk/cmdline-tools/latest/bin/sdkmanager --sdk_root=/home/runner/android-sdk \
+          yes | /home/runner/android-sdk/cmdline-tools/bin/sdkmanager --sdk_root=/home/runner/android-sdk \
             "platform-tools" \
             "platforms;android-33" \
             "build-tools;33.0.2"
