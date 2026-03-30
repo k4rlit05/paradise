@@ -52,7 +52,7 @@ jobs:
           # Install required components
           $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager \
             "platform-tools" \
-            "platforms;android-34" \
+            "platforms;android-33" \
             "build-tools;34.0.0"
 
           # Persist environment variables
@@ -69,15 +69,10 @@ jobs:
           echo "PATH = $PATH"
           ls -R $HOME/android-sdk
 
-      - name: Cache Buildozer
-        uses: actions/cache@v4
-        with:
-          path: ~/.buildozer
-          key: buildozer-${{ runner.os }}-v4
+      # CACHE REMOVED — forces clean build every time
 
       - name: Build APK
         run: |
-          # Corrected PATH (removed the extra 'c')
           export ANDROIDSDK=$HOME/android-sdk
           export ANDROID_SDK_ROOT=$HOME/android-sdk
           export ANDROID_HOME=$HOME/android-sdk
