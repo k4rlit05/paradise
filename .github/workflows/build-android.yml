@@ -24,24 +24,21 @@ jobs:
           pip install --upgrade pip
           pip install buildozer cython
 
-      # First run installs SDK/NDK and prepares environment
       - name: First Buildozer run (to install SDK)
         run: |
           buildozer android debug || true
 
       - name: Show Buildozer Android folders
         run: |
-          echo "Buildozer Android platform folder:"
-          ls -R /home/runner/.buildozer/android/platform || echo "Not found"
+          ls -la bin/
 
-      # Actual build
-      - name: Build APK
+      - name: Build Android APK
         run: |
           buildozer android debug
 
-      # Upload the generated APK
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Paradise-APK
+          name: android-apk
           path: bin/*.apk
+          retention-days: 30
