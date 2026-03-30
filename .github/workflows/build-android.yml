@@ -9,37 +9,47 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 120
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
       - name: Install dependencies
         run: |
           sudo apt update
-          sudo apt install -y python3 python3-pip zip unzip openjdk-17-jdk
+          sudo apt install -y python3 python3-pip zip unzip cython
 
       - name: Install Buildozer
         run: |
           pip install --upgrade pip
           pip install buildozer cython
 
-      - name: First Buildozer run (to install SDK)
+      - name: Build Android APK with full logging
         run: |
-          buildozer android debug || true
+          buildozer android debug -v 2>&1 | tee full-build.log
+        continue-on-error: true
 
-      - name: Show Buildozer Android folders
+      - name: Show last part of log
         run: |
-          echo "SDK root after first run:"
-          ls -R /home/runner/.buildozer/android/platform || echo "Not found"
-          echo "Home folder:"
-          ls -R /home/runner || true
+          echo "=== LAST 300 LINES OF LOG ==="
+          tail -n 300 full-build.log
 
-      - name: Build Android APK
-        run: |
-          buildozer android debug
+      - name: Upload complete build log
+        uses: actions/upload-artifact@v4
+        with:
+          name: complete-build-log
+          path: full-build.log
+          retention-days: 30
 
-      - name: Upload APK artifact
+      - name: Upload APK if exists
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: MyApp
