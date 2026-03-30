@@ -29,10 +29,10 @@ jobs:
           echo "Project structure:"
           ls -R .
 
-      - name: Show Android SDK folders
+      - name: Show Buildozer Android folders
         run: |
-          echo "SDK root:"
-          ls -R /home/runner/android-sdk
+          echo "Buildozer Android platform folder:"
+          ls -R /home/runner/.buildozer/android/platform
 
       - name: Build APK
         run: |
