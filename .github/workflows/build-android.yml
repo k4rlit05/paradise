@@ -39,4 +39,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: MyApp
-          path: bin/*.
+          path: bin/*.apk
+          retention-days: 30
