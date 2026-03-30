@@ -14,47 +14,34 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up Java
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v2
-        with:
-          api-level: 33
-          build-tools: 33.0.2
-
       - name: Install dependencies
         run: |
           sudo apt update
-          sudo apt install -y python3 python3-pip zip unzip
+          sudo apt install -y python3 python3-pip zip unzip openjdk-17-jdk
 
       - name: Install Buildozer
         run: |
           pip install --upgrade pip
           pip install buildozer cython
 
-      - name: Accept all Android SDK Licenses
+      - name: First Buildozer run (to install SDK)
         run: |
-          mkdir -p $ANDROID_HOME/licenses
-          echo -e "\n24333f8a63b6825ea9c5514f83c2829b004d1fee" > $ANDROID_HOME/licenses/android-sdk-license
-          echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > $ANDROID_HOME/licenses/android-sdk-preview-license
-          echo -e "\n79bb18343119f50469f05407e7beba6fa6b1f481" > $ANDROID_HOME/licenses/google-android-sdk-license
-          ls -la $ANDROID_HOME/licenses/
+          buildozer android debug || true
+
+      - name: Show Buildozer Android folders
+        run: |
+          echo "SDK root after first run:"
+          ls -R /home/runner/.buildozer/android/platform || echo "Not found"
+          echo "Home folder:"
+          ls -R /home/runner || true
 
       - name: Build Android APK
         run: |
           buildozer android debug
 
-      - name: Show build output
-        run: |
-          ls -la bin/
-
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: android-apk
+          name: MyApp
           path: bin/*.apk
           retention-days: 30
