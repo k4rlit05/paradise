@@ -52,7 +52,7 @@ jobs:
           # Install required components
           $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager \
             "platform-tools" \
-            "platforms;android-33" \
+            "platforms;android-34" \
             "build-tools;34.0.0"
 
           # Persist environment variables
@@ -77,11 +77,11 @@ jobs:
 
       - name: Build APK
         run: |
-          # --- CRITICAL FIX: python-for-android must see these variables in THIS shell ---
+          # Corrected PATH (removed the extra 'c')
           export ANDROIDSDK=$HOME/android-sdk
           export ANDROID_SDK_ROOT=$HOME/android-sdk
           export ANDROID_HOME=$HOME/android-sdk
-          export PATH=$HOME/android-sdk/ccmdline-tools/latest/bin:$HOME/android-sdk/platform-tools:$PATH
+          export PATH=$HOME/android-sdk/cmdline-tools/latest/bin:$HOME/android-sdk/platform-tools:$PATH
 
           buildozer android debug
 
