@@ -5,6 +5,7 @@
     echo "ANDROID_HOME = $ANDROID_HOME"
     echo "PATH = $PATH"
     ls -R $HOME/android-sdk
+
 name: Build Android APK
 
 on:
