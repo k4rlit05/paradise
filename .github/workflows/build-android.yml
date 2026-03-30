@@ -46,13 +46,16 @@ jobs:
           unzip -q cmdtools.zip -d $HOME/android-sdk/cmdline-tools
           mv $HOME/android-sdk/cmdline-tools/cmdline-tools $HOME/android-sdk/cmdline-tools/latest
 
+          # Accept licenses
           yes | $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses
 
+          # Install required components
           $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager \
             "platform-tools" \
             "platforms;android-33" \
             "build-tools;34.0.0"
 
+          # Persist environment variables
           echo "ANDROIDSDK=$HOME/android-sdk" >> $GITHUB_ENV
           echo "ANDROID_SDK_ROOT=$HOME/android-sdk" >> $GITHUB_ENV
           echo "ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
@@ -74,10 +77,11 @@ jobs:
 
       - name: Build APK
         run: |
+          # --- CRITICAL FIX: python-for-android must see these variables in THIS shell ---
           export ANDROIDSDK=$HOME/android-sdk
           export ANDROID_SDK_ROOT=$HOME/android-sdk
           export ANDROID_HOME=$HOME/android-sdk
-          export PATH=$HOME/android-sdk/cmdline-tools/latest/bin:$HOME/android-sdk/platform-tools:$PATH
+          export PATH=$HOME/android-sdk/ccmdline-tools/latest/bin:$HOME/android-sdk/platform-tools:$PATH
 
           buildozer android debug
 
