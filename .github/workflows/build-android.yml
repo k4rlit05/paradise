@@ -1,3 +1,7 @@
+- name: List all files
+  run: |
+    echo "Project structure:"
+    ls -R .
 name: Build Android APK
 
 on:
