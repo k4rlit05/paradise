@@ -31,7 +31,6 @@ jobs:
           pip install buildozer==1.5.0
           pip install cython==3.0.10
 
-      # This step handles the license files so the build doesn't hang
       - name: Pre-accept Android SDK licenses
         run: |
           mkdir -p ~/.buildozer/android/platform/android-sdk/licenses
@@ -40,18 +39,24 @@ jobs:
 
       - name: Build with Buildozer
         run: |
-          # 1. Define the SDK path
-          export ANDROID_SDK_ROOT=$HOME/.buildozer/android/platform/android-sdk
+          # Define the SDK path
+          export SDK_PATH=$HOME/.buildozer/android/platform/android-sdk
           
-          # 2. TRICK BUILDOZER: Create the old folder it's looking for
-          mkdir -p $ANDROID_SDK_ROOT/tools/bin
+          # 1. Create the 'fake' folder Buildozer is looking for
+          mkdir -p $SDK_PATH/tools/bin
           
-          # 3. LINK THE TOOL: Point the old path to the new real location
-          # This fixes the "sdkmanager path does not exist" error
-          ln -sf $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager $ANDROID_SDK_ROOT/tools/bin/sdkmanager
+          # 2. Create the 'real' folder where the tool actually lives
+          mkdir -p $SDK_PATH/cmdline-tools/latest/bin
           
-          # 4. Set the path and run the build
-          export PATH=$PATH:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools
+          # 3. Create the Shortcut (Symbolic Link)
+          # This tricks Buildozer: when it looks in tools/bin, it finds the real tool
+          ln -sf $SDK_PATH/cmdline-tools/latest/bin/sdkmanager $SDK_PATH/tools/bin/sdkmanager
+          
+          # 4. Set Environment Variables
+          export ANDROID_SDK_ROOT=$SDK_PATH
+          export PATH=$PATH:$SDK_PATH/cmdline-tools/latest/bin:$SDK_PATH/platform-tools
+          
+          # 5. Run the build in verbose mode
           buildozer -v android debug
         env:
           ACCEPT_SDK_LICENSE: "yes"
