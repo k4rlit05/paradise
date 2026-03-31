@@ -2,7 +2,8 @@ name: Build Android APK
 
 on:
   push:
-    branches: [ main, master ]
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
@@ -18,48 +19,30 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install system dependencies
+      - name: Install dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            git zip unzip openjdk-17-jdk \
-            autoconf libtool pkg-config \
-            zlib1g-dev libncurses5-dev libncursesw5-dev \
-            libtinfo5 cmake libffi-dev libssl-dev \
-            build-essential libltdl-dev ccache
-
-      - name: Install Buildozer and dependencies
-        run: |
+          sudo apt update
+          sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
           pip install --upgrade pip
-          pip install buildozer cython==0.29.36
+          pip install buildozer==1.5.0
+          pip install cython==3.0.10
 
-      - name: Set up Android SDK manually
+      - name: Build with Buildozer
         run: |
-          ANDROID_HOME=$HOME/android-sdk
-          mkdir -p $ANDROID_HOME/cmdline-tools
-          curl -o cmdtools.zip "https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip"
-          unzip -q cmdtools.zip -d $ANDROID_HOME/cmdline-tools
-          mv $ANDROID_HOME/cmdline-tools/cmdline-tools $ANDROID_HOME/cmdline-tools/latest
-          export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH
-          yes | sdkmanager --licenses > /dev/null 2>&1
-          sdkmanager "build-tools;34.0.0" "platform-tools" "platforms;android-33"
-          echo "ANDROID_HOME=$ANDROID_HOME" >> $GITHUB_ENV
-          echo "ANDROIDSDK=$ANDROID_HOME" >> $GITHUB_ENV
-          echo "PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH" >> $GITHUB_ENV
-
-      - name: Cache Buildozer
-        uses: actions/cache@v4
-        with:
-          path: ~/.buildozer
-          key: buildozer-${{ runner.os }}-v3
-
-      - name: Build APK
-        run: |
-          buildozer android debug
+          SPEC_FILE=$(find . -name "buildozer.spec")
+          SPEC_DIR=$(dirname "$SPEC_FILE")
+          cd "$SPEC_DIR"
+          
+          # Force a fresh start by removing old build data
+          rm -rf .buildozer
+          
+          # Start the build
+          yes | buildozer android debug
+        env:
+          PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/runner/.local/bin
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: paradise-trading-apk
-          path: bin/*.apk
-          retention-days: 30
+          name: ParadiseTradingApp
+          path: "*/bin/.apk"
