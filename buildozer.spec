@@ -1,45 +1,57 @@
-Run # Adding --verbose ensures we see actual errors if it fails again
-Cloning into 'python-for-android'...
-# Check configuration tokens
-# Ensure build layout
-# Create directory /home/runner/.buildozer/cache
-# Create directory /home/runner/work/paradise/paradise/.buildozer
-# Create directory /home/runner/work/paradise/paradise/bin
-# Create directory /home/runner/work/paradise/paradise/.buildozer/applibs
-# Create directory /home/runner/.buildozer/android/platform/android/platform
-# Create directory /home/runner/work/paradise/paradise/.buildozer/android/platform
-# Create directory /home/runner/work/paradise/paradise/.buildozer/android/app
-# Check configuration tokens
-# Preparing build
-# Check requirements for android
-# Search for Git (git)
-#  -> found at /usr/bin/git
-# Search for Cython (cython)
-#  -> found at /opt/hostedtoolcache/Python/3.11.15/x64/bin/cython
-# Search for Java compiler (javac)
-#  -> found at /usr/lib/jvm/temurin-11-jdk-amd64/bin/javac
-# Search for Java keytool (keytool)
-#  -> found at /usr/lib/jvm/temurin-11-jdk-amd64/bin/keytool
-# Install platform
-# Run ['git', 'clone', '-b', 'master', '--single-branch', 'https://github.com/kivy/python-for-android.git', 'python-for-android']
-# Cwd /home/runner/work/paradise/paradise/.buildozer/android/platform
-# Run ['/opt/hostedtoolcache/Python/3.11.15/x64/bin/python', '-m', 'pip', 'install', '-q', '--user', 'appdirs', 'colorama>=0.3.3', 'jinja2', 'sh>=1.10, <2.0; sys_platform!="win32"', 'build', 'toml', 'packaging', 'setuptools']
-# Cwd None
-# Android ANT is missing, downloading
-# Downloading https://archive.apache.org/dist/ant/binaries/apache-ant-1.9.4-bin.tar.gz
-# Run ['tar', 'xzf', 'apache-ant-1.9.4-bin.tar.gz']
-# Cwd /home/runner/.buildozer/android/platform/apache-ant-1.9.4
-# Apache ANT installation done.
-# Android SDK found at /home/runner/.buildozer/android/platform/android-sdk
-# Recommended android's NDK version by p4a is: 25b
-# Android NDK is missing, downloading
-# Downloading https://dl.google.com/android/repository/android-ndk-r25b-linux.zip
-# Unpacking Android NDK
-# Run ['unzip', '-q', '/home/runner/.buildozer/android/platform/android-ndk-r25b-linux.zip']
-# Cwd /home/runner/.buildozer/android/platform
-# Rename /home/runner/.buildozer/android/platform/android-ndk-r25b to /home/runner/.buildozer/android/platform/android-ndk-r25b
-# Android NDK installation done.
-# Installing/updating SDK platform tools if necessary
-# Check configuration tokens
-# sdkmanager path "/home/runner/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager" does not exist, sdkmanager is notinstalled
-Error: Process completed with exit code 1.
+[app]
+# (str) Title of your application
+title = Paradise Trading App
+
+# (str) Package name
+package.name = paradisetrading
+
+# (str) Package domain
+package.domain = org.paradise
+
+# (str) Source code directory
+source.dir = .
+
+# (list) Source files to include
+source.include_exts = py,kv,png,jpg,json,atlas,txt
+
+# (str) Application version
+version = 1.0.0
+
+# (list) Application requirements
+# Added hostpython3 and openssl for SSL/Trading connection support
+requirements = python3,kivy==2.3.0,pillow,openssl,requests,urllib3,hostpython3
+
+# (str) Supported orientation
+orientation = portrait
+
+# (list) Permissions
+android.permissions = INTERNET,WRITE_EXTERNAL_STORAGE,READ_EXTERNAL_STORAGE
+
+# (int) Target Android API
+android.api = 33
+
+# (int) Minimum API
+android.minapi = 21
+
+# (str) Android NDK version to use
+android.ndk = 25b
+
+# (str) python-for-android branch to use
+# THIS IS THE FIX for the sdkmanager error
+p4a.branch = develop
+
+# (bool) Automatically accept SDK license agreements
+android.accept_sdk_license = True
+
+# (list) The Android architectures to build for
+android.archs = arm64-v8a, armeabi-v7a
+
+# (bool) indicates if the application should be signed for distribution
+android.release = False
+
+[buildozer]
+# (int) Log level (2 = debug to see exactly what's happening)
+log_level = 2
+
+# (int) Display warning if buildozer is run as root
+warn_on_root = 1
