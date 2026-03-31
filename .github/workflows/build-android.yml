@@ -24,27 +24,24 @@ jobs:
           sudo apt update
           sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
           pip install --upgrade pip
-          pip install buildozer
-          pip install cython==0.29.33
+          # We are using a specific Buildozer and Cython combo that is stable
+          pip install buildozer==1.5.0
+          pip install cython==3.0.10
 
       - name: Build with Buildozer
         run: |
-          # This command finds exactly where your buildozer.spec is hiding
           SPEC_FILE=$(find . -name "buildozer.spec")
           SPEC_DIR=$(dirname "$SPEC_FILE")
-          
           echo "Found spec file in: $SPEC_DIR"
           cd "$SPEC_DIR"
-          
-          # Start the build process
+          # This command cleans the broken old build attempts before starting fresh
+          buildozer android clean
           yes | buildozer android debug
         env:
-          # This fixed the "command not found" error from before
           PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/runner/.local/bin
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: ParadiseTradingApp
-          # This looks in all folders for the finished APK
           path: "*/bin/.apk"
