@@ -19,7 +19,7 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install system dependencies
+      - name: Install dependencies
         run: |
           sudo apt update
           sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
@@ -29,16 +29,22 @@ jobs:
 
       - name: Build with Buildozer
         run: |
-          # Go directly into the paradise folder
-          cd paradise
+          # This command finds exactly where your buildozer.spec is hiding
+          SPEC_FILE=$(find . -name "buildozer.spec")
+          SPEC_DIR=$(dirname "$SPEC_FILE")
           
-          # Run buildozer and automatically say 'yes' to everything
+          echo "Found spec file in: $SPEC_DIR"
+          cd "$SPEC_DIR"
+          
+          # Start the build process
           yes | buildozer android debug
         env:
-          PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+          # This fixed the "command not found" error from before
+          PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/runner/.local/bin
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: ParadiseTradingApp
-          path: paradise/bin/*.apk
+          # This looks in all folders for the finished APK
+          path: "*/bin/.apk"
