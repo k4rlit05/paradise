@@ -7,7 +7,7 @@ source.dir = .
 source.include_exts = py,kv,png,jpg,json
 version = 1.0.0
 
-# ADDED 'openssl' here to fix the -lssl error
+# ADDED 'openssl' here to fix the "cannot find -lssl" error
 requirements = python3,kivy==2.3.0,pillow,openssl
 
 orientation = portrait
@@ -17,14 +17,14 @@ android.permissions = INTERNET
 # --- STABLE ANDROID SETTINGS ---
 android.api = 34
 android.minapi = 21
-# Critical: NDK 25b is the most stable for OpenSSL builds
+# Fixed to 25b for maximum compatibility with SSL builds
 android.ndk = 25b
 android.ndk_api = 21
 
 # Modern phone support
 android.archs = arm64-v8a, armeabi-v7a
 
-# Fixes the Gradle download crash
+# Fixes the Gradle download crash found in earlier logs
 android.gradle_dependencies = 'com.android.tools.build:gradle:7.4.2'
 # -------------------------------
 
