@@ -29,12 +29,16 @@ jobs:
 
       - name: Build with Buildozer
         run: |
-          # If your files are in the 'paradise' folder, we move there first
-          # If they are in the main folder, this command just runs
-          buildozer android debug
+          # This command searches for your spec file and runs buildozer in that folder
+          SPEC_PATH=$(find . -name "buildozer.spec" -printf '%h\n' | head -n 1)
+          cd "$SPEC_PATH"
+          echo "Building in folder: $SPEC_PATH"
+          yes | buildozer android debug
+        env:
+          PATH: /home/runner/.local/bin:$PATH
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: ParadiseTradingApp
-          path: bin/*.apk
+          path: "*/bin/.apk"
