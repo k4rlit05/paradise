@@ -18,13 +18,15 @@ android.permissions = INTERNET
 # --- ANDROID CONFIG ---
 android.api = 33
 android.minapi = 21
-android.ndk = 25b
-android.archs = arm64-v8a, armeabi-v7a
 android.sdk_api = 33
 android.build_tools_version = 33.0.2
 
-# --- ACCEPT LICENSES ---
-android.accept_sdk_license = True
+# Force Buildozer to use the SDK/NDK installed in GitHub Actions
+android.sdk_path = /home/runner/android-sdk
+android.ndk_path = /home/runner/android-sdk/ndk/25.1.8937393
+
+# REMOVE THIS (it breaks the build)
+# android.ndk = 25b
 
 android.allow_backup = True
 
