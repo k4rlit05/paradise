@@ -42,6 +42,11 @@ jobs:
       - name: Build with Buildozer
         run: |
           # Adding --verbose ensures we see actual errors if it fails again
+      - name: Build with Buildozer
+        run: |
+          export ANDROID_SDK_ROOT=$HOME/.buildozer/android/platform/android-sdk
+          export PATH=$PATH:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools
+          buildozer android debug
           buildozer android debug
         env:
           ACCEPT_SDK_LICENSE: "yes"
