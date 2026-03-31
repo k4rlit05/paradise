@@ -5,26 +5,27 @@ package.domain = org.paradise
 
 source.dir = .
 source.include_exts = py,kv,png,jpg,json
-
 version = 1.0.0
 
-# Critical: Use Kivy 2.3.1 for modern Android compatibility
-requirements = python3,kivy==2.3.1,pillow,hostpython3
+# Stable requirements
+requirements = python3,kivy==2.3.0,pillow
 
 orientation = portrait
 fullscreen = 0
-
 android.permissions = INTERNET
 
-# 2026 Play Store Requirements
-android.api = 35
+# --- STABLE ANDROID SETTINGS ---
+android.api = 34
 android.minapi = 21
-android.sdk_api = 35
-android.build_tools_version = 35.0.0
+android.ndk = 25b
 android.ndk_api = 21
 
-# Architecture for all modern devices
+# Modern phone support
 android.archs = arm64-v8a, armeabi-v7a
+
+# This specific line fixes the "Gradle Download Error"
+android.gradle_dependencies = 'com.android.tools.build:gradle:7.4.2'
+# -------------------------------
 
 [buildozer]
 log_level = 2
