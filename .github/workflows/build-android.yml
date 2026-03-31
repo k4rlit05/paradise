@@ -8,22 +8,33 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-    
+    runs-on: ubuntu-22.04
+
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Build with Buildozer
-        uses: ArtemSBulgakov/buildozer-action@v1
-        id: buildozer
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          # We manually run the command to bypass the "user" permission bug
-          command: buildozer android debug
-          buildozer_version: master
+          python-version: '3.11'
 
-      - name: Upload APK artifact
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
+          pip install --upgrade pip
+          pip install buildozer
+          pip install cython==0.29.33
+
+      - name: Build with Buildozer
+        run: |
+          # If your files are in the 'paradise' folder, we move there first
+          # If they are in the main folder, this command just runs
+          buildozer android debug
+
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: ParadiseTradingApp
-          path: ./*.apk
+          path: bin/*.apk
