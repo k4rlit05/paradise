@@ -39,24 +39,20 @@ jobs:
 
       - name: Build with Buildozer
         run: |
-          # Define the SDK path
+          # 1. Manually create the folder path Buildozer expects
           export SDK_PATH=$HOME/.buildozer/android/platform/android-sdk
-          
-          # 1. Create the 'fake' folder Buildozer is looking for
           mkdir -p $SDK_PATH/tools/bin
-          
-          # 2. Create the 'real' folder where the tool actually lives
           mkdir -p $SDK_PATH/cmdline-tools/latest/bin
           
-          # 3. Create the Shortcut (Symbolic Link)
-          # This tricks Buildozer: when it looks in tools/bin, it finds the real tool
+          # 2. Link the 'missing' tool to the real location
+          # This tricks Buildozer into finding the sdkmanager
           ln -sf $SDK_PATH/cmdline-tools/latest/bin/sdkmanager $SDK_PATH/tools/bin/sdkmanager
           
-          # 4. Set Environment Variables
+          # 3. Set standard Android environment variables
           export ANDROID_SDK_ROOT=$SDK_PATH
           export PATH=$PATH:$SDK_PATH/cmdline-tools/latest/bin:$SDK_PATH/platform-tools
           
-          # 5. Run the build in verbose mode
+          # 4. Run Buildozer in Verbose mode
           buildozer -v android debug
         env:
           ACCEPT_SDK_LICENSE: "yes"
