@@ -24,29 +24,42 @@ jobs:
           pip install buildozer==1.5.0
           pip install cython==3.0.10
 
-      - name: Manual SDK Setup (Fixes sdkmanager error)
+      - name: Manual SDK Setup
         run: |
-          # Create the directory structure ahead of time
           export SDK_DIR=$HOME/.buildozer/android/platform/android-sdk
           mkdir -p $SDK_DIR/cmdline-tools
           
-          # Download the real command line tools from Google
+          # Download command line tools
           curl -L https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -o cmdline.zip
           unzip -q cmdline.zip -d $SDK_DIR/cmdline-tools
           mv $SDK_DIR/cmdline-tools/cmdline-tools $SDK_DIR/cmdline-tools/latest
           
-          # Create the legacy 'tools/bin' link that Buildozer 1.5.0 insists on
+          # Create legacy links for Buildozer 1.5.0
           mkdir -p $SDK_DIR/tools/bin
           ln -sf $SDK_DIR/cmdline-tools/latest/bin/sdkmanager $SDK_DIR/tools/bin/sdkmanager
+
+      - name: Force-Accept Android Licenses
+        run: |
+          export SDK_DIR=$HOME/.buildozer/android/platform/android-sdk
+          mkdir -p $SDK_DIR/licenses
+          
+          # Manually inject the license hashes to bypass the interactive prompt
+          echo -e "8933bad161af917814a4f82cb0832845174914d7\n24333f8a63b6825ea9d5513f8e0b5833d3735936\n3513397330230f8050e5726226c6d04f215d2639\nd5624d8d1199f22f0367098e946a48b32e6a97f3\n263b96ad0126a544c95ebd063031120286392398" > $SDK_DIR/licenses/android-sdk-license
+          echo -e "d975f750698565345a0d283dd043e414e0409244" > $SDK_DIR/licenses/android-googletv-license
+          
+          # Ensure sdkmanager is executable and run the license accept command
+          chmod +x $SDK_DIR/cmdline-tools/latest/bin/sdkmanager
+          yes | $SDK_DIR/cmdline-tools/latest/bin/sdkmanager --sdk_root=$SDK_DIR --licenses || true
 
       - name: Build with Buildozer
         run: |
           export ANDROID_SDK_ROOT=$HOME/.buildozer/android/platform/android-sdk
           export PATH=$PATH:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools
           
-          # Pre-accept licenses so the build doesn't freeze
-          yes | sdkmanager --sdk_root=$ANDROID_SDK_ROOT --licenses || true
+          # Pre-run buildozer's internal license check
+          yes | buildozer android licenses || true
           
+          # Final Build
           buildozer -v android debug
         env:
           ACCEPT_SDK_LICENSE: "yes"
