@@ -6,7 +6,7 @@ source.dir = .
 source.include_exts = py,kv,png,jpg,json,atlas,txt
 version = 1.0.0
 
-# Requirements (Added hostpython3 to help compilation)
+# Requirements (Added hostpython3 to ensure smooth compilation)
 requirements = python3,kivy==2.3.0,pillow,openssl,requests,urllib3,hostpython3
 
 orientation = portrait
@@ -14,7 +14,8 @@ android.permissions = INTERNET
 android.api = 34
 android.minapi = 21
 
-# CRITICAL: These must be exactly these versions for the fix
+# IMPORTANT: Using NDK 28c with the develop branch 
+# fixes the modern Android SDK pathing issues.
 android.ndk = 28c
 p4a.branch = develop
 
