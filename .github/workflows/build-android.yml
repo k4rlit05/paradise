@@ -18,12 +18,12 @@ jobs:
         uses: ArtemSBulgakov/buildozer-action@v1
         id: buildozer
         with:
+          # We manually run the command to bypass the "user" permission bug
           command: buildozer android debug
           buildozer_version: master
-          workdir: .
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: ParadiseTradingApp
-          path: ${{ steps.buildozer.outputs.filename }}
+          path: ./*.apk
