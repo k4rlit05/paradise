@@ -1,28 +1,31 @@
 [app]
-title = Paradise Trading App
-package.name = paradisetrading
-package.domain = org.paradise
-source.dir = .
-source.include_exts = py,kv,png,jpg,json,atlas,txt
-version = 1.0.0
+# ... (title, package name, etc.)
 
-# Added 'openssl' and 'requests' for trading API stability
-requirements = python3,kivy==2.3.0,pillow,openssl,requests,urllib3,hostpython3
+# (list) Application requirements
+# Added 'libffi' and 'openssl' which are needed for 'requests' to work on Android
+requirements = python3,kivy==2.3.0,pillow,openssl,requests,urllib3,libffi,hostpython3
 
-orientation = portrait
-fullscreen = 0
+# (list) Permissions
 android.permissions = INTERNET
 
-# Match NDK 25b and API 31 for stability
+# --- ANDROID SETTINGS ---
+# Use these exact versions for maximum compatibility
 android.api = 31
 android.minapi = 21
 android.ndk = 25b
 android.ndk_api = 21
+
+# Modern phone architectures
 android.archs = arm64-v8a, armeabi-v7a
 
-# CRITICAL FIXES
+# CRITICAL: Forces the build to bypass the license check crash
 android.accept_sdk_license = True
+
+# Standardizes the build environment to prevent "Bad Gateway" during Gradle sync
 android.gradle_dependencies = 'com.android.tools.build:gradle:7.4.2'
+
+# (bool) use_setup_py = False (Usually safer for modern Kivy)
+android.use_setup_py = False
 
 [buildozer]
 log_level = 2
