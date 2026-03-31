@@ -8,35 +8,21 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04  # Using 22.04 for better compatibility with older NDKs
+    runs-on: ubuntu-latest
     
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Get Date
-        id: get-date
-        run: |
-          echo "date=$(date -u +'%Y%m%d')" >> $GITHUB_OUTPUT
-
-      # This caches the build so future builds are much faster
-      - name: Buildozer Cache
-        uses: actions/cache@v4
-        with:
-          path: ./.buildozer
-          key: buildozer-${{ runner.os }}-${{ steps.get-date.outputs.date }}-${{ hashFiles('buildozer.spec') }}
-
       - name: Build Android APK with Buildozer
-        uses: ArtemSere/buildozer-action@v1
+        uses: kivy/buildozer-action@v1.5.0
         with:
+          save_buildozer_cache: true
           buildozer_version: master
-          # This command ensures it actually runs the compilation
           command: buildozer android debug
-          repository_root: .
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: ParadiseTradingApp
-          # Buildozer puts the output in the bin folder
           path: bin/*.apk
