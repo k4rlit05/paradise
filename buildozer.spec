@@ -8,7 +8,7 @@ source.include_exts = py,kv,png,jpg,json
 
 version = 1.0.0
 
-# ADDED: hostpython3 is required for the compilation process
+# Fixed requirements for Kivy 2.3.1 and Python 3
 requirements = python3,kivy==2.3.1,pillow,hostpython3
 
 orientation = portrait
@@ -16,18 +16,14 @@ fullscreen = 0
 
 android.permissions = INTERNET
 
-# --- ANDROID CONFIG ---
-android.api = 33
+# 2026 Play Store Standards (API 35 for Android 15)
+android.api = 35
 android.minapi = 21
+android.sdk_api = 35
+android.build_tools_version = 35.0.0
 android.ndk_api = 21
-android.sdk_api = 33
-android.build_tools_version = 33.0.2
 
-# FIXED: Commented these out. GitHub Actions will provide these automatically.
-# android.sdk_path = /home/runner/android-sdk
-# android.ndk_path = /home/runner/android-sdk/ndk/25.1.8937393
-
-# RECOMMENDED: Build for both modern and older 64-bit/32-bit devices
+# Architecture for modern phones
 android.archs = arm64-v8a, armeabi-v7a
 
 android.allow_backup = True
