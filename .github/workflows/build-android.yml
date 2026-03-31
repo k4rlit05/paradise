@@ -1,16 +1,21 @@
 name: Build Android APK
-
 on:
   push:
-    branches:
-      - main
-  workflow_dispatch:
+    branches: [ main ]
 
 jobs:
   build:
     runs-on: ubuntu-22.04
 
     steps:
+      # This is the "Magic" part that prevents the 'No space left' error
+      - name: Free disk space
+        run: |
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /opt/ghc
+          sudo rm -rf "/usr/local/share/boost"
+          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -22,27 +27,19 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt update
-          sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
+          sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev build-essential
           pip install --upgrade pip
           pip install buildozer==1.5.0
           pip install cython==3.0.10
 
       - name: Build with Buildozer
         run: |
-          SPEC_FILE=$(find . -name "buildozer.spec")
-          SPEC_DIR=$(dirname "$SPEC_FILE")
-          cd "$SPEC_DIR"
-          
-          # Force a fresh start by removing old build data
-          rm -rf .buildozer
-          
-          # Start the build
-          yes | buildozer android debug
+          buildozer android debug
         env:
-          PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/runner/.local/bin
+          ACCEPT_SDK_LICENSE: "yes"
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: ParadiseTradingApp
-          path: "*/bin/.apk"
+          name: ParadiseApp
+          path: bin/*.apk
