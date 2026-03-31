@@ -40,11 +40,14 @@ jobs:
 
           # Download Google's official command-line tools
           wget https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O cmdtools.zip
-          unzip cmdtools.zip
+          unzip cmdtools.zip -d temp
 
-          # Move into correct folder structure
+          # Create proper folder structure
           mkdir -p cmdline-tools/latest
-          mv cmdline-tools/* cmdline-tools/latest/
+          mv temp/cmdline-tools/* cmdline-tools/latest/
+
+          # Clean up
+          rm -rf temp cmdtools.zip
 
           export ANDROID_HOME=$HOME/android-sdk
           export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$PATH
