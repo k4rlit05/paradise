@@ -1,56 +1,45 @@
-[app]
-# (str) Title of your application
-title = Paradise Trading App
-
-# (str) Package name
-package.name = paradisetrading
-
-# (str) Package domain (needed for android packaging)
-package.domain = org.paradise
-
-# (str) Source code where the main.py live
-source.dir = .
-
-# (list) Source files to include (let's add atlas and txt just in case)
-source.include_exts = py,kv,png,jpg,json,atlas,txt
-
-# (str) Application version
-version = 1.0.0
-
-# (list) Application requirements
-# Added 'requests' and 'urllib3' as they are common for trading apps
-requirements = python3,kivy==2.3.0,pillow,openssl,requests,urllib3
-
-# (str) Supported orientation
-orientation = portrait
-
-# (list) Permissions
-android.permissions = INTERNET
-
-# (int) Target Android API, should be as high as possible.
-android.api = 33
-
-# (int) Minimum API your APK will support.
-android.minapi = 21
-
-# (str) Android NDK version to use
-android.ndk = 25b
-
-# (int) Android NDK API to use. This is the minimum API your app will support.
-android.ndk_api = 21
-
-# (bool) Use this to skip the license prompts that cause the "File Too Large" error
-android.accept_sdk_license = True
-
-# (list) The Android architectures to build for
-android.archs = arm64-v8a, armeabi-v7a
-
-# (bool) indicates if the application should be signed for distribution
-android.release = False
-
-[buildozer]
-# (int) Log level (0 = error only, 1 = info, 2 = debug (with command output))
-log_level = 2
-
-# (int) Display warning if buildozer is run as root (0 = no, 1 = yes)
-warn_on_root = 1
+Run # Adding --verbose ensures we see actual errors if it fails again
+Cloning into 'python-for-android'...
+# Check configuration tokens
+# Ensure build layout
+# Create directory /home/runner/.buildozer/cache
+# Create directory /home/runner/work/paradise/paradise/.buildozer
+# Create directory /home/runner/work/paradise/paradise/bin
+# Create directory /home/runner/work/paradise/paradise/.buildozer/applibs
+# Create directory /home/runner/.buildozer/android/platform/android/platform
+# Create directory /home/runner/work/paradise/paradise/.buildozer/android/platform
+# Create directory /home/runner/work/paradise/paradise/.buildozer/android/app
+# Check configuration tokens
+# Preparing build
+# Check requirements for android
+# Search for Git (git)
+#  -> found at /usr/bin/git
+# Search for Cython (cython)
+#  -> found at /opt/hostedtoolcache/Python/3.11.15/x64/bin/cython
+# Search for Java compiler (javac)
+#  -> found at /usr/lib/jvm/temurin-11-jdk-amd64/bin/javac
+# Search for Java keytool (keytool)
+#  -> found at /usr/lib/jvm/temurin-11-jdk-amd64/bin/keytool
+# Install platform
+# Run ['git', 'clone', '-b', 'master', '--single-branch', 'https://github.com/kivy/python-for-android.git', 'python-for-android']
+# Cwd /home/runner/work/paradise/paradise/.buildozer/android/platform
+# Run ['/opt/hostedtoolcache/Python/3.11.15/x64/bin/python', '-m', 'pip', 'install', '-q', '--user', 'appdirs', 'colorama>=0.3.3', 'jinja2', 'sh>=1.10, <2.0; sys_platform!="win32"', 'build', 'toml', 'packaging', 'setuptools']
+# Cwd None
+# Android ANT is missing, downloading
+# Downloading https://archive.apache.org/dist/ant/binaries/apache-ant-1.9.4-bin.tar.gz
+# Run ['tar', 'xzf', 'apache-ant-1.9.4-bin.tar.gz']
+# Cwd /home/runner/.buildozer/android/platform/apache-ant-1.9.4
+# Apache ANT installation done.
+# Android SDK found at /home/runner/.buildozer/android/platform/android-sdk
+# Recommended android's NDK version by p4a is: 25b
+# Android NDK is missing, downloading
+# Downloading https://dl.google.com/android/repository/android-ndk-r25b-linux.zip
+# Unpacking Android NDK
+# Run ['unzip', '-q', '/home/runner/.buildozer/android/platform/android-ndk-r25b-linux.zip']
+# Cwd /home/runner/.buildozer/android/platform
+# Rename /home/runner/.buildozer/android/platform/android-ndk-r25b to /home/runner/.buildozer/android/platform/android-ndk-r25b
+# Android NDK installation done.
+# Installing/updating SDK platform tools if necessary
+# Check configuration tokens
+# sdkmanager path "/home/runner/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager" does not exist, sdkmanager is notinstalled
+Error: Process completed with exit code 1.
