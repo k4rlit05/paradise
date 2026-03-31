@@ -31,8 +31,7 @@ jobs:
           pip install buildozer==1.5.0
           pip install cython==3.0.10
 
-      # FIX: This step creates the license files manually.
-      # This prevents the "File Too Large" error by skipping the license text dump.
+      # This step handles the license files so the build doesn't hang
       - name: Pre-accept Android SDK licenses
         run: |
           mkdir -p ~/.buildozer/android/platform/android-sdk/licenses
@@ -41,13 +40,19 @@ jobs:
 
       - name: Build with Buildozer
         run: |
-          # Adding --verbose ensures we see actual errors if it fails again
-      - name: Build with Buildozer
-        run: |
+          # 1. Define the SDK path
           export ANDROID_SDK_ROOT=$HOME/.buildozer/android/platform/android-sdk
+          
+          # 2. TRICK BUILDOZER: Create the old folder it's looking for
+          mkdir -p $ANDROID_SDK_ROOT/tools/bin
+          
+          # 3. LINK THE TOOL: Point the old path to the new real location
+          # This fixes the "sdkmanager path does not exist" error
+          ln -sf $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager $ANDROID_SDK_ROOT/tools/bin/sdkmanager
+          
+          # 4. Set the path and run the build
           export PATH=$PATH:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools
-          buildozer android debug
-          buildozer android debug
+          buildozer -v android debug
         env:
           ACCEPT_SDK_LICENSE: "yes"
 
