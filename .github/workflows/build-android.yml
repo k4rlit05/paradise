@@ -24,24 +24,31 @@ jobs:
           sudo apt update
           sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
           pip install --upgrade pip
-          # We are using a specific Buildozer and Cython combo that is stable
+          # Using specific versions to prevent Cython/Buildozer conflicts
           pip install buildozer==1.5.0
           pip install cython==3.0.10
 
       - name: Build with Buildozer
         run: |
+          # 1. Locate the spec file automatically
           SPEC_FILE=$(find . -name "buildozer.spec")
           SPEC_DIR=$(dirname "$SPEC_FILE")
           echo "Found spec file in: $SPEC_DIR"
           cd "$SPEC_DIR"
-          # This command cleans the broken old build attempts before starting fresh
-          buildozer android clean
+          
+          # 2. Manually clear any old build folders to prevent errors
+          rm -rf .buildozer
+          
+          # 3. Start the build process
+          # 'yes' automatically accepts the Android SDK licenses
           yes | buildozer android debug
         env:
+          # Ensure the system knows exactly where all tools are located
           PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/runner/.local/bin
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: ParadiseTradingApp
+          # This looks for the finished APK inside the bin folder
           path: "*/bin/.apk"
