@@ -8,13 +8,6 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
-      - name: Free disk space
-        run: |
-          sudo rm -rf /usr/share/dotnet
-          sudo rm -rf /opt/ghc
-          sudo rm -rf "/usr/local/share/boost"
-          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
-
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -31,28 +24,29 @@ jobs:
           pip install buildozer==1.5.0
           pip install cython==3.0.10
 
-      - name: Pre-accept Android SDK licenses
+      - name: Manual SDK Setup (Fixes sdkmanager error)
         run: |
-          mkdir -p ~/.buildozer/android/platform/android-sdk/licenses
-          echo -e "8933bad161af9b7d12a89dfc411700131f310183\n24333f8a63b6825ea9c5573f86c23893070cc5af\n853330671016303217345b512702335607b322a3" > ~/.buildozer/android/platform/android-sdk/licenses/android-sdk-license
-          echo -e "84831b9409646a918e30573bab4c9c91346d8abd" > ~/.buildozer/android/platform/android-sdk/licenses/android-sdk-preview-license
+          # Create the directory structure ahead of time
+          export SDK_DIR=$HOME/.buildozer/android/platform/android-sdk
+          mkdir -p $SDK_DIR/cmdline-tools
+          
+          # Download the real command line tools from Google
+          curl -L https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -o cmdline.zip
+          unzip -q cmdline.zip -d $SDK_DIR/cmdline-tools
+          mv $SDK_DIR/cmdline-tools/cmdline-tools $SDK_DIR/cmdline-tools/latest
+          
+          # Create the legacy 'tools/bin' link that Buildozer 1.5.0 insists on
+          mkdir -p $SDK_DIR/tools/bin
+          ln -sf $SDK_DIR/cmdline-tools/latest/bin/sdkmanager $SDK_DIR/tools/bin/sdkmanager
 
       - name: Build with Buildozer
         run: |
-          # Define SDK Path
-          export SDK_PATH=$HOME/.buildozer/android/platform/android-sdk
+          export ANDROID_SDK_ROOT=$HOME/.buildozer/android/platform/android-sdk
+          export PATH=$PATH:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools
           
-          # Fix for the 'sdkmanager' path error in Buildozer 1.5.0
-          mkdir -p $SDK_PATH/tools/bin
+          # Pre-accept licenses so the build doesn't freeze
+          yes | sdkmanager --sdk_root=$ANDROID_SDK_ROOT --licenses || true
           
-          # We check if cmdline-tools exists, if not, Buildozer will download it.
-          # But we create the link ahead of time to satisfy the check.
-          ln -sf $SDK_PATH/cmdline-tools/latest/bin/sdkmanager $SDK_PATH/tools/bin/sdkmanager || true
-          
-          export ANDROID_SDK_ROOT=$SDK_PATH
-          export PATH=$PATH:$SDK_PATH/cmdline-tools/latest/bin:$SDK_PATH/platform-tools
-          
-          # Run the build
           buildozer -v android debug
         env:
           ACCEPT_SDK_LICENSE: "yes"
