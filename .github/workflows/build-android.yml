@@ -8,7 +8,6 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
-      # This is the "Magic" part that prevents the 'No space left' error
       - name: Free disk space
         run: |
           sudo rm -rf /usr/share/dotnet
@@ -32,8 +31,17 @@ jobs:
           pip install buildozer==1.5.0
           pip install cython==3.0.10
 
+      # FIX: This step creates the license files manually.
+      # This prevents the "File Too Large" error by skipping the license text dump.
+      - name: Pre-accept Android SDK licenses
+        run: |
+          mkdir -p ~/.buildozer/android/platform/android-sdk/licenses
+          echo -e "8933bad161af9b7d12a89dfc411700131f310183\n24333f8a63b6825ea9c5573f86c23893070cc5af\n853330671016303217345b512702335607b322a3" > ~/.buildozer/android/platform/android-sdk/licenses/android-sdk-license
+          echo -e "84831b9409646a918e30573bab4c9c91346d8abd" > ~/.buildozer/android/platform/android-sdk/licenses/android-sdk-preview-license
+
       - name: Build with Buildozer
         run: |
+          # Adding --verbose ensures we see actual errors if it fails again
           buildozer android debug
         env:
           ACCEPT_SDK_LICENSE: "yes"
