@@ -37,11 +37,13 @@ jobs:
         run: |
           sudo mkdir -p /usr/lib/android-sdk
           sudo chown $USER:$USER /usr/lib/android-sdk
-          yes | sudo apt install -y android-sdk
+
+          sudo apt install -y cmdtest || true
+          sudo apt install -y android-sdk
 
           sdkmanager --sdk_root=/usr/lib/android-sdk "platform-tools"
           sdkmanager --sdk_root=/usr/lib/android-sdk "platforms;android-33"
-          sdkmanager --sdk_root=/usr.lib/android-sdk "build-tools;33.0.2"
+          sdkmanager --sdk_root=/usr/lib/android-sdk "build-tools;33.0.2"
           sdkmanager --sdk_root=/usr/lib/android-sdk "ndk;25.1.8937393"
 
       - name: Install Buildozer
@@ -57,7 +59,7 @@ jobs:
           buildozer android debug 2>&1 | tee build.log
 
       - name: Upload APK artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ParadiseTradingApp
           path: bin/*.apk
