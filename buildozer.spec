@@ -34,7 +34,7 @@ android.api = 33
 android.minapi = 21
 
 # (str) Android NDK version to use
-android.ndk = 25b
+android.ndk = 28b
 
 # (str) python-for-android branch to use
 # THIS IS THE FIX for the sdkmanager error
