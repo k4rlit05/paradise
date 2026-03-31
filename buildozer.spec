@@ -6,7 +6,7 @@ source.dir = .
 source.include_exts = py,kv,png,jpg,json,atlas,txt
 version = 1.0.0
 
-# Requirements including networking and image support
+# Requirements (Added hostpython3 to help compilation)
 requirements = python3,kivy==2.3.0,pillow,openssl,requests,urllib3,hostpython3
 
 orientation = portrait
@@ -14,7 +14,7 @@ android.permissions = INTERNET
 android.api = 34
 android.minapi = 21
 
-# IMPORTANT: These two must match for the 'develop' branch
+# CRITICAL: These must be exactly these versions for the fix
 android.ndk = 28c
 p4a.branch = develop
 
