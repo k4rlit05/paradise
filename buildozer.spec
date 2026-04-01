@@ -8,7 +8,7 @@ source.include_exts = py,kv,png,jpg,json
 
 version = 1.0.0
 
-requirements = python3,kivy==2.3.1,pillow,requests,urllib3
+requirements = python3,kivy==2.3.1,pillow,requests,urllib3,cython<3
 
 orientation = portrait
 fullscreen = 0
