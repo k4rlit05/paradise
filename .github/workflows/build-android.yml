@@ -21,43 +21,35 @@ jobs:
           sudo apt update
           sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev build-essential
           pip install --upgrade pip
-          pip install buildozer==1.5.0
-          pip install cython==3.0.10
+          pip install buildozer cython
 
-      - name: Manual SDK & License Setup
+      - name: Install Android SDK + NDK
         run: |
-          export SDK_DIR=$HOME/.buildozer/android/platform/android-sdk
-          mkdir -p $SDK_DIR/cmdline-tools
-          
-          # Download stable command line tools
+          mkdir -p $HOME/android-sdk
+          cd $HOME/android-sdk
+
           curl -L https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -o cmdline.zip
-          unzip -q cmdline.zip -d $SDK_DIR/cmdline-tools
-          mv $SDK_DIR/cmdline-tools/cmdline-tools $SDK_DIR/cmdline-tools/latest
-          
-          # Fix Buildozer 1.5.0 path requirements
-          mkdir -p $SDK_DIR/tools/bin
-          ln -sf $SDK_DIR/cmdline-tools/latest/bin/sdkmanager $SDK_DIR/tools/bin/sdkmanager
-          
-          # Inject License Hashes
-          mkdir -p $SDK_DIR/licenses
-          echo -e "8933bad161af917814a4f82cb0832845174914d7\n24333f8a63b6825ea9d5513f8e0b5833d3735936\n3513397330230f8050e5726226c6d04f215d2639\nd5624d8d1199f22f0367098e946a48b32e6a97f3\n263b96ad0126a544c95ebd063031120286392398" > $SDK_DIR/licenses/android-sdk-license
-          echo -e "d975f750698565345a0d283dd043e414e0409244" > $SDK_DIR/licenses/android-googletv-license
+          unzip -q cmdline.zip -d cmdline-tools
+          mv cmdline-tools/cmdline-tools cmdline-tools/latest
 
-      - name: Build with Buildozer (with Retries)
+          export ANDROID_HOME=$HOME/android-sdk
+          export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$PATH
+
+          yes | sdkmanager --licenses
+          sdkmanager "platform-tools"
+          sdkmanager "platforms;android-33"
+          sdkmanager "build-tools;33.0.2"
+          sdkmanager "ndk;25.1.8937393"
+
+      - name: Build with Buildozer
         run: |
-          export ANDROID_SDK_ROOT=$HOME/.buildozer/android/platform/android-sdk
-          export PATH=$PATH:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools
-          
-          # Accept licenses via buildozer internal tool
-          yes | buildozer android licenses || true
-          
-          # Retry loop: Handles 502 Bad Gateway by trying up to 3 times
-          for i in {1..3}; do
-            echo "Build attempt $i..."
-            buildozer -v android debug && break || (echo "Build failed, retrying in 30s..." && sleep 30)
-          done
-        env:
-          ACCEPT_SDK_LICENSE: "yes"
+          export ANDROIDSDK=$HOME/android-sdk
+          export ANDROIDNDK=$HOME/android-sdk/ndk/25.1.8937393
+          export ANDROIDAPI=33
+          export ANDROIDMINAPI=21
+          export PATH=$PATH:$ANDROIDSDK/platform-tools
+
+          buildozer -v android debug 2>&1 | tee build.log
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
