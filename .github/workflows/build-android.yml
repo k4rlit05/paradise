@@ -47,6 +47,11 @@ jobs:
 
       - name: Build with Buildozer
         run: |
+          # Re-export environment variables so Buildozer sees them
+          export ANDROID_HOME=$HOME/android-sdk
+          export ANDROID_SDK_ROOT=$HOME/android-sdk
+          export PATH=$HOME/android-sdk/cmdline-tools/latest/bin:$HOME/android-sdk/platform-tools:$PATH
+
           export ANDROIDSDK=$ANDROID_HOME
           export ANDROIDNDK=$ANDROID_HOME/ndk/25.1.8937393
           export ANDROIDAPI=33
