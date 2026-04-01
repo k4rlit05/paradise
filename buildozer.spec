@@ -2,32 +2,30 @@
 title = Paradise Trading App
 package.name = paradisetrading
 package.domain = org.paradise
+
 source.dir = .
 source.include_exts = py,kv,png,jpg,json
+
 version = 1.0.0
 
-# Critical: Added libffi and openssl
-requirements = python3,kivy==2.3.1,pillow,libffi,openssl,requests,urllib3,hostpython3
+requirements = python3,kivy==2.3.1,pillow,requests,urllib3
 
 orientation = portrait
 fullscreen = 0
 android.permissions = INTERNET
 
-# --- THE STABILITY FIX ---
+# --- ANDROID CONFIG ---
 android.api = 33
 android.minapi = 21
 android.ndk_api = 21
 android.sdk_api = 33
 
-# Force NDK 25b (NDK 27 is too new and causes the crash you see)
-android.ndk = 25b
 android.build_tools_version = 33.0.2
 
-# Leave these blank
 android.sdk_path =
 android.ndk_path =
 
-android.gradle_dependencies = 'com.android.tools.build:gradle:7.4.2'
+android.gradle_dependencies = com.android.tools.build:gradle:7.4.2
 android.use_androidx = True
 android.accept_sdk_license = True
 android.archs = arm64-v8a, armeabi-v7a
