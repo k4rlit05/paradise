@@ -1,31 +1,33 @@
 [app]
-# ... (title, package name, etc.)
+title = Paradise Trading App
+package.name = paradisetrading
+package.domain = org.paradise
 
-# (list) Application requirements
-# Added 'libffi' and 'openssl' which are needed for 'requests' to work on Android
-requirements = python3,kivy==2.3.0,pillow,openssl,requests,urllib3,libffi,hostpython3
+source.dir = .
+source.include_exts = py,kv,png,jpg,json
 
-# (list) Permissions
+version = 1.0.0
+
+requirements = python3,kivy==2.3.1,pillow
+
+orientation = portrait
+fullscreen = 0
+
 android.permissions = INTERNET
 
-# --- ANDROID SETTINGS ---
-# Use these exact versions for maximum compatibility
-android.api = 31
+# --- ANDROID CONFIG ---
+android.api = 33
 android.minapi = 21
-android.ndk = 25b
 android.ndk_api = 21
+android.sdk_api = 33
+android.build_tools_version = 33.0.2
 
-# Modern phone architectures
-android.archs = arm64-v8a, armeabi-v7a
+# Force Buildozer to use the SDK/NDK installed in GitHub Actions
+android.sdk_path = /home/runner/android-sdk
+android.ndk_path = /home/runner/android-sdk/ndk/25.1.8937393
 
-# CRITICAL: Forces the build to bypass the license check crash
-android.accept_sdk_license = True
-
-# Standardizes the build environment to prevent "Bad Gateway" during Gradle sync
-android.gradle_dependencies = 'com.android.tools.build:gradle:7.4.2'
-
-# (bool) use_setup_py = False (Usually safer for modern Kivy)
-android.use_setup_py = False
+android.allow_backup = True
 
 [buildozer]
 log_level = 2
+warn_on_root = 1
