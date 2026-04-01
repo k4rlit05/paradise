@@ -26,6 +26,11 @@ android.build_tools_version = 33.0.2
 android.sdk_path = /home/runner/android-sdk
 android.ndk_path = /home/runner/android-sdk/ndk/25.1.8937393
 
+# Force modern Gradle build system
+android.gradle_dependencies = com.android.tools.build:gradle:7.0.2
+android.use_androidx = True
+android.enable_legacy_aapt = False
+
 android.allow_backup = True
 
 [buildozer]
