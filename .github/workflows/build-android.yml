@@ -46,7 +46,7 @@ jobs:
 
       - name: Build with Buildozer
         run: |
-          # Force Python 3.10 instead of system Python 3.11
+          # FORCE Python 3.10 (critical)
           export PATH="/opt/hostedtoolcache/Python/3.10.*/x64/bin:$PATH"
 
           # Remove conflicting system NDK variables
