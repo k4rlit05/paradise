@@ -28,17 +28,17 @@ jobs:
           mkdir -p $HOME/android-sdk
           cd $HOME/android-sdk
 
-          # Download command-line tools
           curl -L https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -o cmdline.zip
           unzip -q cmdline.zip -d cmdline-tools
           mv cmdline-tools/cmdline-tools cmdline-tools/latest
 
-          # Persist environment variables across steps
           echo "ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
           echo "ANDROID_SDK_ROOT=$HOME/android-sdk" >> $GITHUB_ENV
-          echo "PATH=$HOME/android-sdk/cmdline-tools/latest/bin:$HOME/android-sdk/platform-tools:$PATH" >> $GITHUB_ENV
+          echo "ANDROID_NDK_HOME=$HOME/android-sdk/ndk/25.1.8937393" >> $GITHUB_ENV
 
-          # Install SDK components
+          echo "ANDROID_TOOLS=$HOME/android-sdk/cmdline-tools/latest/bin" >> $GITHUB_ENV
+          echo "ANDROID_PLATFORM_TOOLS=$HOME/android-sdk/platform-tools" >> $GITHUB_ENV
+
           yes | $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses
           $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager "platform-tools"
           $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager "platforms;android-33"
@@ -47,13 +47,14 @@ jobs:
 
       - name: Build with Buildozer
         run: |
-          # Re-export environment variables so Buildozer sees them
           export ANDROID_HOME=$HOME/android-sdk
           export ANDROID_SDK_ROOT=$HOME/android-sdk
-          export PATH=$HOME/android-sdk/cmdline-tools/latest/bin:$HOME/android-sdk/platform-tools:$PATH
+          export ANDROID_NDK_HOME=$HOME/android-sdk/ndk/25.1.8937393
+
+          export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH
 
           export ANDROIDSDK=$ANDROID_HOME
-          export ANDROIDNDK=$ANDROID_HOME/ndk/25.1.8937393
+          export ANDROIDNDK=$ANDROID_NDK_HOME
           export ANDROIDAPI=33
           export ANDROIDMINAPI=21
 
