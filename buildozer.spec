@@ -20,9 +20,11 @@ android.api = 33
 android.minapi = 21
 android.ndk_api = 21
 android.sdk_api = 33
+
+# This MUST match your GitHub Actions workflow
 android.build_tools_version = 33.0.2
 
-# IMPORTANT: Leave these EMPTY so Buildozer uses the GitHub Actions environment
+# Leave these empty so Buildozer uses the GitHub Actions environment
 android.sdk_path =
 android.ndk_path =
 
@@ -38,9 +40,8 @@ android.allow_backup = True
 log_level = 2
 warn_on_root = 1
 
-# --- FIX: Make Buildozer see AIDL ---
-# This ensures the parser finds the AIDL binary
-# GitHub Actions installs build-tools here:
-# /home/runner/android-sdk/build-tools/33.0.2/aidl
+# Accept SDK licenses automatically
 android.accept_sdk_license = True
-path = /home/runner/android-sdk/build-tools/33.0.2:/home/runner/android-sdk/platform-tools:/home/runner/android-sdk/cmdline-tools/latest/bin
+
+# ❗ IMPORTANT: DO NOT SET "path = ..."
+# Buildozer will use the PATH from GitHub Actions correctly.
