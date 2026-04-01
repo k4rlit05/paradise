@@ -22,8 +22,9 @@ android.sdk_api = 33
 
 android.build_tools_version = 33.0.2
 
-android.sdk_path =
-android.ndk_path =
+# Explicit paths to SDK/NDK for CI
+android.sdk_path = /home/runner/.buildozer/android/platform/android-sdk
+android.ndk_path = /home/runner/.buildozer/android/platform/android-ndk-r25b
 
 android.gradle_dependencies = com.android.tools.build:gradle:7.4.2
 android.use_androidx = True
