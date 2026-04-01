@@ -1,4 +1,5 @@
 name: Build Android APK
+
 on:
   push:
     branches: [ main ]
@@ -8,67 +9,83 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v4
 
-      - name: Set up Python 3.10
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
+    # -------------------------------
+    # Force Python 3.10 FIRST
+    # -------------------------------
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
 
-      - name: Install System Dependencies
-        run: |
-          sudo apt update
-          sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev build-essential
-          pip install --upgrade pip
-          pip install "buildozer==1.5.0"
-          pip install "cython<3"
+    - name: Verify Python version
+      run: |
+        python --version
+        pip --version
 
-      - name: Install Android SDK + NDK
-        run: |
-          mkdir -p $HOME/android-sdk
-          cd $HOME/android-sdk
+    # -------------------------------
+    # Install system packages
+    # -------------------------------
+    - name: Install System Dependencies
+      run: |
+        sudo apt update
+        sudo apt install -y \
+          git zip unzip openjdk-17-jdk \
+          autoconf libtool pkg-config \
+          zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 \
+          cmake libffi-dev libssl-dev build-essential
 
-          curl -L https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -o cmdline.zip
-          unzip -q cmdline.zip -d cmdline-tools
-          mv cmdline-tools/cmdline-tools cmdline-tools/latest
+        python -m pip install --upgrade pip
+        python -m pip install buildozer==1.5.0
+        python -m pip install "cython<3"
 
-          echo "ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
-          echo "ANDROID_SDK_ROOT=$HOME/android-sdk" >> $GITHUB_ENV
-          echo "ANDROID_NDK_HOME=$HOME/android-sdk/ndk/25.1.8937393" >> $GITHUB_ENV
+    # -------------------------------
+    # Install Android SDK + NDK
+    # -------------------------------
+    - name: Install Android SDK + NDK
+      run: |
+        mkdir -p $HOME/android-sdk
+        cd $HOME/android-sdk
 
-          yes | $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses
-          $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager "platform-tools"
-          $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager "platforms;android-33"
-          $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager "build-tools;33.0.2"
-          $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager "build-tools;37.0.0"
-          $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager "ndk;25.1.8937393"
+        curl -L https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -o cmdline.zip
+        unzip -q cmdline.zip -d cmdline-tools
+        mv cmdline-tools/cmdline-tools cmdline-tools/latest
 
-      - name: Build with Buildozer
-        run: |
-          # FORCE Python 3.10 (critical)
-          export PATH="/opt/hostedtoolcache/Python/3.10.*/x64/bin:$PATH"
+        echo "ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
+        echo "ANDROID_SDK_ROOT=$HOME/android-sdk" >> $GITHUB_ENV
+        echo "ANDROID_NDK_HOME=$HOME/android-sdk/ndk/25.1.8937393" >> $GITHUB_ENV
 
-          # Remove conflicting system NDK variables
-          unset ANDROID_NDK
-          unset ANDROID_NDK_ROOT
-          unset ANDROID_NDK_LATEST_HOME
+        yes | $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses
 
-          export ANDROID_HOME=$HOME/android-sdk
-          export ANDROID_SDK_ROOT=$HOME/android-sdk
-          export ANDROID_NDK_HOME=$HOME/android-sdk/ndk/25.1.8937393
+        $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager "platform-tools"
+        $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager "platforms;android-33"
+        $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager "build-tools;33.0.2"
+        $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager "ndk;25.1.8937393"
 
-          export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH
+    # -------------------------------
+    # Build APK
+    # -------------------------------
+    - name: Build APK with Buildozer
+      run: |
+        unset ANDROID_NDK
+        unset ANDROID_NDK_ROOT
+        unset ANDROID_NDK_LATEST_HOME
 
-          export ANDROIDSDK=$ANDROID_HOME
-          export ANDROIDNDK=$ANDROID_NDK_HOME
-          export ANDROIDAPI=33
-          export ANDROIDMINAPI=21
+        export ANDROID_HOME=$HOME/android-sdk
+        export ANDROID_SDK_ROOT=$HOME/android-sdk
+        export ANDROID_NDK_HOME=$HOME/android-sdk/ndk/25.1.8937393
 
-          buildozer -v android debug 2>&1 | tee build.log
+        export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH
 
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: ParadiseApp
-          path: bin/*.apk
+        buildozer -v android debug
+
+    # -------------------------------
+    # Upload APK
+    # -------------------------------
+    - name: Upload APK
+      uses: actions/upload-artifact@v4
+      with:
+        name: ParadiseApp
+        path: bin/*.apk
