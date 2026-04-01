@@ -22,11 +22,11 @@ android.ndk_api = 21
 android.sdk_api = 33
 android.build_tools_version = 33.0.2
 
-# Force Buildozer to use the SDK/NDK installed in GitHub Actions
-android.sdk_path = /home/runner/android-sdk
-android.ndk_path = /home/runner/android-sdk/ndk/25.1.8937393
+# IMPORTANT: Leave these EMPTY so Buildozer uses the GitHub Actions environment
+android.sdk_path =
+android.ndk_path =
 
-# Force modern Gradle build system (prevents Ant/Java6 fallback)
+# Force modern Gradle build system
 android.gradle_dependencies = com.android.tools.build:gradle:7.0.2
 android.use_androidx = True
 android.enable_legacy_aapt = False
