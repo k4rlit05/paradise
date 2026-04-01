@@ -28,26 +28,29 @@ jobs:
           mkdir -p $HOME/android-sdk
           cd $HOME/android-sdk
 
+          # Download command-line tools
           curl -L https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -o cmdline.zip
           unzip -q cmdline.zip -d cmdline-tools
           mv cmdline-tools/cmdline-tools cmdline-tools/latest
 
-          export ANDROID_HOME=$HOME/android-sdk
-          export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$PATH
+          # Persist environment variables across steps
+          echo "ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
+          echo "ANDROID_SDK_ROOT=$HOME/android-sdk" >> $GITHUB_ENV
+          echo "PATH=$HOME/android-sdk/cmdline-tools/latest/bin:$HOME/android-sdk/platform-tools:$PATH" >> $GITHUB_ENV
 
-          yes | sdkmanager --licenses
-          sdkmanager "platform-tools"
-          sdkmanager "platforms;android-33"
-          sdkmanager "build-tools;33.0.2"
-          sdkmanager "ndk;25.1.8937393"
+          # Install SDK components
+          yes | $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses
+          $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager "platform-tools"
+          $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager "platforms;android-33"
+          $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager "build-tools;33.0.2"
+          $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager "ndk;25.1.8937393"
 
       - name: Build with Buildozer
         run: |
-          export ANDROIDSDK=$HOME/android-sdk
-          export ANDROIDNDK=$HOME/android-sdk/ndk/25.1.8937393
+          export ANDROIDSDK=$ANDROID_HOME
+          export ANDROIDNDK=$ANDROID_HOME/ndk/25.1.8937393
           export ANDROIDAPI=33
           export ANDROIDMINAPI=21
-          export PATH=$PATH:$ANDROIDSDK/platform-tools
 
           buildozer -v android debug 2>&1 | tee build.log
 
