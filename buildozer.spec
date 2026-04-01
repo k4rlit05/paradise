@@ -6,24 +6,27 @@ source.dir = .
 source.include_exts = py,kv,png,jpg,json
 version = 1.0.0
 
-# Requirements for trading (SSL/Networking)
+# Critical: Added libffi and openssl
 requirements = python3,kivy==2.3.1,pillow,libffi,openssl,requests,urllib3,hostpython3
 
 orientation = portrait
 fullscreen = 0
 android.permissions = INTERNET
 
-# --- ANDROID CONFIG ---
-# Matching the GitHub Runner's pre-installed versions
+# --- THE STABILITY FIX ---
 android.api = 33
 android.minapi = 21
 android.ndk_api = 21
+android.sdk_api = 33
 
-# Let Buildozer auto-detect these from the Environment Variables we set in YML
-android.sdk_path = 
-android.ndk_path = 
-
+# Force NDK 25b (NDK 27 is too new and causes the crash you see)
+android.ndk = 25b
 android.build_tools_version = 33.0.2
+
+# Leave these blank
+android.sdk_path =
+android.ndk_path =
+
 android.gradle_dependencies = 'com.android.tools.build:gradle:7.4.2'
 android.use_androidx = True
 android.accept_sdk_license = True
