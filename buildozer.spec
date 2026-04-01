@@ -33,6 +33,14 @@ android.enable_legacy_aapt = False
 
 android.allow_backup = True
 
+
 [buildozer]
 log_level = 2
 warn_on_root = 1
+
+# --- FIX: Make Buildozer see AIDL ---
+# This ensures the parser finds the AIDL binary
+# GitHub Actions installs build-tools here:
+# /home/runner/android-sdk/build-tools/33.0.2/aidl
+android.accept_sdk_license = True
+path = /home/runner/android-sdk/build-tools/33.0.2:/home/runner/android-sdk/platform-tools:/home/runner/android-sdk/cmdline-tools/latest/bin
