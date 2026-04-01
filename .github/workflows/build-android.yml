@@ -9,27 +9,36 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
+    # -----------------------------------
+    # Checkout repository
+    # -----------------------------------
     - name: Checkout code
       uses: actions/checkout@v4
 
-    # -------------------------------
-    # Force Python 3.10 FIRST
-    # -------------------------------
+    # -----------------------------------
+    # Install Python 3.10
+    # -----------------------------------
     - name: Set up Python 3.10
       uses: actions/setup-python@v5
       with:
         python-version: '3.10'
 
-    - name: Verify Python version
+    # -----------------------------------
+    # FORCE Python 3.10 before installing anything
+    # -----------------------------------
+    - name: Verify Python
       run: |
+        export PATH="/opt/hostedtoolcache/Python/3.10.*/x64/bin:$PATH"
         python --version
         pip --version
 
-    # -------------------------------
-    # Install system packages
-    # -------------------------------
-    - name: Install System Dependencies
+    # -----------------------------------
+    # Install system dependencies
+    # -----------------------------------
+    - name: Install system dependencies
       run: |
+        export PATH="/opt/hostedtoolcache/Python/3.10.*/x64/bin:$PATH"
+
         sudo apt update
         sudo apt install -y \
           git zip unzip openjdk-17-jdk \
@@ -41,9 +50,9 @@ jobs:
         python -m pip install buildozer==1.5.0
         python -m pip install "cython<3"
 
-    # -------------------------------
+    # -----------------------------------
     # Install Android SDK + NDK
-    # -------------------------------
+    # -----------------------------------
     - name: Install Android SDK + NDK
       run: |
         mkdir -p $HOME/android-sdk
@@ -64,11 +73,13 @@ jobs:
         $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager "build-tools;33.0.2"
         $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager "ndk;25.1.8937393"
 
-    # -------------------------------
-    # Build APK
-    # -------------------------------
-    - name: Build APK with Buildozer
+    # -----------------------------------
+    # Build APK with Buildozer
+    # -----------------------------------
+    - name: Build APK
       run: |
+        export PATH="/opt/hostedtoolcache/Python/3.10.*/x64/bin:$PATH"
+
         unset ANDROID_NDK
         unset ANDROID_NDK_ROOT
         unset ANDROID_NDK_LATEST_HOME
@@ -81,9 +92,9 @@ jobs:
 
         buildozer -v android debug
 
-    # -------------------------------
+    # -----------------------------------
     # Upload APK
-    # -------------------------------
+    # -----------------------------------
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
