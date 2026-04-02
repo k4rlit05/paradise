@@ -2,12 +2,11 @@
 title = Paradise
 package.name = paradise
 package.domain = org.paradise
-source.dir = .
+source.dir = paradise
 version = 1.0.0
 orientation = portrait
 fullscreen = 0
 
-# (list) Application requirements
 requirements = python3,kivy==2.3.0,pillow,openssl,requests,urllib3,libffi,hostpython3
 
 android.permissions = INTERNET
