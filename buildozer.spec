@@ -38,10 +38,10 @@ android.use_androidx = True
 android.accept_sdk_license = True
 
 # Architectures to build
-android.archs = arm64-v8a, armeabi-v7a
+android.archs = arm64-v8a
 
 [buildozer]
 # Log verbosity (2 = normal)
-log_level = 2
+log_level = 1
 warn_on_root = 1
 force_build = 0  # Only rebuild if necessary
