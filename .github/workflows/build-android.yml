@@ -11,6 +11,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Free Disk Space
+        run: |
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /opt/ghc
+          sudo rm -rf "/usr/local/share/boost"
+          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -29,11 +36,12 @@ jobs:
           pip install --upgrade pip
           pip install "Cython<3.0"
           pip install buildozer==1.5.0
-          # DEZE REGEL IS NU GECORRIGEERD:
+          # DEZE REGEL IS NU VOLLEDIG:
           pip install git+https://github.com
 
       - name: Build with Buildozer
         run: |
+          # Voorkom Broken Pipe door Gradle daemon uit te zetten
           export GRADLE_OPTS="-Dorg.gradle.daemon=false"
           yes | buildozer -v android debug
         env:
@@ -44,3 +52,4 @@ jobs:
         with:
           name: paradise-app-debug
           path: bin/*.apk
+          if-no-files-found: error
