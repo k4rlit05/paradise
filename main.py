@@ -1,3 +1,4 @@
-from ui.app import TradingApp
+from paradise.ui.app import TradingApp
 
-TradingApp().run()
+if __name__ == "__main__":
+    TradingApp().run()
