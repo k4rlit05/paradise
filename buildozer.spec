@@ -12,12 +12,12 @@ version = 1.0.0
 orientation = portrait
 fullscreen = 0
 
-# Essentiële bibliotheken voor Kivy + Netwerk
+# Libraries voor Kivy, Netwerk en AI
 requirements = python3, kivy==2.3.0, pillow, openssl, requests, urllib3, certifi, chardet, libffi, hostpython3, toml
 
 android.permissions = INTERNET, ACCESS_NETWORK_STATE
 
-# Stabiele instellingen voor Android 13/14 ondersteuning
+# Stabiele API & NDK instellingen
 android.api = 33
 android.minapi = 21
 android.ndk = 25b
@@ -25,8 +25,9 @@ android.ndk_api = 21
 android.archs = arm64-v8a
 android.accept_sdk_license = True
 
-# We laten buildozer zelf de gradle-versie bepalen voor meer stabiliteit
-android.use_setup_py = False
+# Geforceerde Gradle versie voor stabiliteit met Java 17
+android.gradle_dependencies = 'com.android.tools.build:gradle:7.4.2'
+android.enable_androidx = True
 
 [buildozer]
 log_level = 2
