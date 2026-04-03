@@ -29,7 +29,7 @@ jobs:
           pip install --upgrade pip
           pip install "Cython<3.0"
           pip install buildozer==1.5.0
-          # Forceer de nieuwste versie van python-for-android
+          # HIER stond de fout, dit is de juiste link:
           pip install git+https://github.com
 
       - name: Build with Buildozer
