@@ -1,4 +1,5 @@
 [app]
+# (Algemene informatie)
 title = Paradise
 package.name = paradise
 package.domain = org.paradise
@@ -12,22 +13,27 @@ version = 1.0.0
 orientation = portrait
 fullscreen = 0
 
-# Libraries voor Kivy, Netwerk en AI
+# Essentiële bibliotheken voor Kivy, Netwerk en AI (toml toegevoegd)
+# hostpython3 is verplicht voor cross-compiling op GitHub
 requirements = python3, kivy==2.3.0, pillow, openssl, requests, urllib3, certifi, chardet, libffi, hostpython3, toml
 
+# Rechten voor internettoegang
 android.permissions = INTERNET, ACCESS_NETWORK_STATE
 
-# Stabiele API & NDK instellingen
+# Stabiele Android API & NDK instellingen voor Kivy 2.3.0
 android.api = 33
 android.minapi = 21
 android.ndk = 25b
 android.ndk_api = 21
 android.archs = arm64-v8a
 android.accept_sdk_license = True
-
-# Geforceerde Gradle versie voor stabiliteit met Java 17
-android.gradle_dependencies = 'com.android.tools.build:gradle:7.4.2'
 android.enable_androidx = True
+
+# Gebruik de nieuwste fixes van python-for-android (lost gradle-fouten op)
+p4a.branch = master
+
+# We laten buildozer zelf de gradle-versie bepalen voor meer stabiliteit met Java 17
+# (Verwijder handmatige gradle_dependencies regels als die er nog stonden)
 
 [buildozer]
 log_level = 2
