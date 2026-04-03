@@ -44,12 +44,12 @@ jobs:
 
       - name: Build APK with Buildozer
         run: |
+          cd paradise
           export GRADLE_OPTS="-Dorg.gradle.daemon=false"
           buildozer -v android debug
         env:
           APP_ANDROID_ACCEPT_SDK_LICENSE: "1"
 
-      # ⭐ NEW: Automatically find the APK no matter where Buildozer puts it
       - name: Collect APK
         run: |
           mkdir -p bin
