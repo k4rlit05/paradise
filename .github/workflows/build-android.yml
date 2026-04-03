@@ -23,10 +23,10 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Set up JDK 11
+      - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
-          java-version: '11'
+          java-version: '17'
           distribution: 'temurin'
 
       - name: Install System Dependencies
@@ -39,8 +39,9 @@ jobs:
 
       - name: Build with Buildozer
         run: |
-          # Gebruik -v (verbose) maar voorkom dat de log te groot wordt door alleen errors/info te tonen
-          yes | buildozer android debug
+          # Voorkom Broken Pipe door Gradle daemon uit te zetten
+          export GRADLE_OPTS="-Dorg.gradle.daemon=false"
+          yes | buildozer -v android debug
         env:
           APP_ANDROID_ACCEPT_SDK_LICENSE: "1"
 
@@ -49,3 +50,4 @@ jobs:
         with:
           name: paradise-app-debug
           path: bin/*.apk
+          if-no-files-found: error
