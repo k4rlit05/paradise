@@ -40,7 +40,6 @@ jobs:
 
       - name: Build with Buildozer
         run: |
-          # Voorkom Broken Pipe door Gradle daemon uit te zetten
           export GRADLE_OPTS="-Dorg.gradle.daemon=false"
           yes | buildozer -v android debug
         env:
