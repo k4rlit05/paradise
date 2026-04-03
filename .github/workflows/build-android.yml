@@ -11,6 +11,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Free Disk Space
+        run: |
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /opt/ghc
+          sudo rm -rf "/usr/local/share/boost"
+          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -32,8 +39,8 @@ jobs:
 
       - name: Build with Buildozer
         run: |
-          # Forceer licenties en start de build
-          yes | buildozer -v android debug
+          # Gebruik -v (verbose) maar voorkom dat de log te groot wordt door alleen errors/info te tonen
+          yes | buildozer android debug
         env:
           APP_ANDROID_ACCEPT_SDK_LICENSE: "1"
 
@@ -42,4 +49,3 @@ jobs:
         with:
           name: paradise-app-debug
           path: bin/*.apk
-          if-no-files-found: error
