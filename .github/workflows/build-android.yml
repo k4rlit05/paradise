@@ -37,7 +37,6 @@ jobs:
           python3 -m pip install --upgrade pip
           python3 -m pip install "cython<3.0" buildozer==1.5.0
 
-      # 🔥 IMPORTANT: clean previous broken builds
       - name: Clean Buildozer cache
         run: |
           rm -rf .buildozer
@@ -49,6 +48,12 @@ jobs:
           buildozer -v android debug
         env:
           APP_ANDROID_ACCEPT_SDK_LICENSE: "1"
+
+      # ⭐ NEW: Automatically find the APK no matter where Buildozer puts it
+      - name: Collect APK
+        run: |
+          mkdir -p bin
+          find . -type f -name "*.apk" -exec cp {} bin/ \;
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
