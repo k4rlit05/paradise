@@ -10,7 +10,7 @@ source.dir = .
 source.include_exts = py,png,jpg,kv,atlas,json
 
 # Include all modules inside the inner paradise folder
-source.include_patterns = paradise/*.py, paradise/ui/*.py, paradise/engine/*.py, paradise/backend/*.py
+source.include_patterns = paradise/**/*.py
 
 # EXCLUDE old Java patches so Buildozer doesn't apply SDLActivity.java.patch
 source.exclude_patterns = src/patches/*
