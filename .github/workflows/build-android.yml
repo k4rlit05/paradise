@@ -27,7 +27,7 @@ jobs:
             zip \
             unzip \
             openjdk-17-jdk \
-            libncurses5 \
+            libncurses6 \
             libstdc++6 \
             libffi-dev \
             libssl-dev \
