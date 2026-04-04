@@ -30,6 +30,7 @@ android.permissions = INTERNET,ACCESS_NETWORK_STATE
 # ---------------------------------------------------------
 android.api = 34
 android.compile_sdk = 34
+android.sdk = 34
 android.minapi = 21
 android.archs = arm64-v8a, armeabi-v7a
 android.enable_androidx = True
