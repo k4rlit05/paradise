@@ -44,6 +44,7 @@ jobs:
       - name: Clean Buildozer cache
         run: |
           rm -rf .buildozer
+          rm -rf ~/.buildozer
           rm -rf bin
 
       - name: Show buildozer.spec (debug)
