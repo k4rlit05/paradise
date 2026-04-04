@@ -25,7 +25,9 @@ requirements = python3, kivy==2.3.1, pillow, requests, urllib3, certifi, idna, c
 # Permissions
 android.permissions = INTERNET,ACCESS_NETWORK_STATE
 
-# Android build settings
+# ---------------------------------------------------------
+# ANDROID BUILD SETTINGS (CLEAN + CORRECT)
+# ---------------------------------------------------------
 android.api = 33
 android.minapi = 21
 android.archs = arm64-v8a, armeabi-v7a
@@ -36,6 +38,14 @@ android.gradle_dependencies = androidx.appcompat:appcompat:1.6.1, androidx.core:
 
 # Kivy bootstrap
 p4a.bootstrap = sdl2
+
+# ---------------------------------------------------------
+# IMPORTANT: FORCE BUILD TO IGNORE SYSTEM SDK/NDK
+# These MUST stay commented exactly like this
+# ---------------------------------------------------------
+#android.sdk_path =
+#android.ndk_path =
+#android.ndk_api =
 
 [buildozer]
 log_level = 1
