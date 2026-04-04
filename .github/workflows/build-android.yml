@@ -36,18 +36,16 @@ jobs:
             git zip unzip autoconf libtool pkg-config zlib1g-dev \
             libncurses5-dev libncursesw5-dev libtinfo5 \
             cmake libffi-dev libssl-dev build-essential \
-            libjpeg-dev libpng-dev wget android-sdk
+            libjpeg-dev libpng-dev wget
 
           python3 -m pip install --upgrade pip
           python3 -m pip install "cython<3.0" buildozer==1.5.0
 
-      - name: Install Android SDK Platform 33
+      - name: Prepare Android directories for p4a
         run: |
-          export ANDROID_SDK_ROOT=/usr/lib/android-sdk
-          export PATH=$PATH:$ANDROID_SDK_ROOT/tools/bin:$ANDROID_SDK_ROOT/platform-tools
-
-          yes | sdkmanager --licenses
-          sdkmanager "platforms;android-33" "platform-tools"
+          mkdir -p $HOME/.buildozer/android/platform
+          mkdir -p $HOME/.buildozer/android/platform/android-sdk
+          mkdir -p $HOME/.buildozer/android/platform/android-ndk
 
       - name: Clean Buildozer cache
         run: |
@@ -57,8 +55,6 @@ jobs:
       - name: Build APK with Buildozer (Full Verbose Logging)
         run: |
           cd paradise
-          export ANDROID_SDK_ROOT=/usr/lib/android-sdk
-          export PATH=$PATH:$ANDROID_SDK_ROOT/platform-tools
           export GRADLE_OPTS="-Dorg.gradle.daemon=false"
           buildozer -v --log-level=2 android debug
         env:
