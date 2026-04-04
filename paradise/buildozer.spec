@@ -20,19 +20,22 @@ orientation = portrait
 fullscreen = 0
 
 # Python dependencies
-requirements = python3, kivy==2.3.1, pillow, requests, urllib3, certifi, idna, charset-normalizer
+requirements = python3, kivy==2.3.1, pillow, requests, urllib3, certifi, idna, charset-normalizer, openssl
 
 # Permissions
 android.permissions = INTERNET,ACCESS_NETWORK_STATE
 
 # Android build settings
 android.api = 33
+android.sdk = 33
 android.minapi = 21
-android.ndk_api = 21
 android.archs = arm64-v8a, armeabi-v7a
 
 android.accept_sdk_license = True
 android.enable_androidx = True
+
+# Required for Kivy 2.3.x
+android.gradle_dependencies = androidx.appcompat:appcompat:1.6.1, androidx.core:core-ktx:1.12.0
 
 # Kivy bootstrap
 p4a.bootstrap = sdl2
