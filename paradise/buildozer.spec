@@ -13,7 +13,7 @@ source.include_exts = py,png,jpg,kv,atlas,json
 source.include_patterns = paradise/*.py, paradise/ui/*.py, paradise/engine/*.py, paradise/backend/*.py
 
 # App icon
-icon.filename = paradise/assets/icon.png
+icon.filename = assets/icon.png
 
 version = 1.0.0
 orientation = portrait
