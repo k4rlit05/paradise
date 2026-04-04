@@ -32,7 +32,7 @@ android.api = 34
 android.compile_sdk = 34
 android.sdk = 34
 android.minapi = 21
-android.archs = arm64-v8a, armeabi-v7a
+android.archs = arm64-v8a
 android.enable_androidx = True
 
 # Required for Kivy 2.3.x
