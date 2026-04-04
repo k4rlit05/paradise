@@ -50,7 +50,7 @@ jobs:
         run: |
           cd paradise
           export GRADLE_OPTS="-Dorg.gradle.daemon=false"
-          buildozer -v --log-level 2 android debug
+          buildozer -v --log-level=2 android debug
         env:
           APP_ANDROID_ACCEPT_SDK_LICENSE: "1"
 
