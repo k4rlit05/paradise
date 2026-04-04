@@ -3,21 +3,23 @@ title = Paradise
 package.name = paradise
 package.domain = org.paradise
 
-# The app lives inside the current folder
-source.dir = .
+# Your real code lives inside the inner paradise folder
+source.dir = paradise
 
-# Include all needed file types
+# Include Python and asset files
 source.include_exts = py,png,jpg,kv,atlas,json
 
-# CRITICAL FIX — include all Python modules from your folders
-source.include_patterns = *.py, engine/*.py, backend/*.py, ui/*.py
+# Include all modules inside the inner paradise folder
+source.include_patterns = paradise/*.py, paradise/ui/*.py, paradise/engine/*.py, paradise/backend/*.py
+
+# App icon
+icon.filename = paradise/assets/icon.png
 
 version = 1.0.0
-
 orientation = portrait
 fullscreen = 0
 
-# Required Python modules
+# Python dependencies
 requirements = python3, kivy==2.3.1, pillow, requests, urllib3, certifi, idna, charset-normalizer
 
 # Permissions
