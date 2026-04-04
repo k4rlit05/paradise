@@ -41,16 +41,16 @@ jobs:
           python3 -m pip install --upgrade pip
           python3 -m pip install "cython<3.0" buildozer==1.5.0
 
-      - name: Prepare Android directories for p4a
-        run: |
-          mkdir -p $HOME/.buildozer/android/platform
-          mkdir -p $HOME/.buildozer/android/platform/android-sdk
-          mkdir -p $HOME/.buildozer/android/platform/android-ndk
-
       - name: Clean Buildozer cache
         run: |
           rm -rf .buildozer
           rm -rf bin
+
+      - name: Show buildozer.spec (debug)
+        run: |
+          cd paradise
+          echo "----- buildozer.spec content -----"
+          cat buildozer.spec
 
       - name: Build APK with Buildozer (Full Verbose Logging)
         run: |
