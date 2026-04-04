@@ -4,7 +4,7 @@ package.name = paradise
 package.domain = org.paradise
 
 # Your real code lives inside the inner paradise folder
-source.dir = paradise
+source.dir = .
 
 # Include Python and asset files
 source.include_exts = py,png,jpg,kv,atlas,json
