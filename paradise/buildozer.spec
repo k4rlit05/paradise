@@ -36,10 +36,9 @@ android.compile_sdk = 34
 android.sdk = 34
 android.minapi = 21
 android.archs = arm64-v8a
-android.enable_androidx = True
 
-# Required for Kivy 2.3.x
-android.gradle_dependencies = androidx.appcompat:appcompat:1.6.1, androidx.core:core-ktx:1.12.0
+# ❌ REMOVED: android.enable_androidx = True
+# ❌ REMOVED: android.gradle_dependencies = ...
 
 # Kivy bootstrap
 p4a.bootstrap = sdl2
