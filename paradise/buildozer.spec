@@ -37,9 +37,6 @@ android.sdk = 34
 android.minapi = 21
 android.archs = arm64-v8a
 
-# ❌ REMOVED: android.enable_androidx = True
-# ❌ REMOVED: android.gradle_dependencies = ...
-
 # Kivy bootstrap
 p4a.bootstrap = sdl2
 
