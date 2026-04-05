@@ -1,5 +1,4 @@
 [app]
-requirements = python3==3.11.0, kivy==2.3.1, pillow, requests, urllib3, certifi, idna, charset-normalizer
 title = Paradise
 package.name = paradise
 package.domain = org.paradise
@@ -24,7 +23,7 @@ orientation = portrait
 fullscreen = 0
 
 # Python dependencies
-requirements = python3, kivy==2.3.1, pillow, requests, urllib3, certifi, idna, charset-normalizer, openssl
+requirements = python3==3.11.0, kivy==2.3.1, pillow, requests, urllib3, certifi, idna, charset-normalizer
 
 # Permissions
 android.permissions = INTERNET,ACCESS_NETWORK_STATE
